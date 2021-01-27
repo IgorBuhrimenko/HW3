@@ -1,11 +1,7 @@
 from flask import Flask , render_template
-app = Flask(__name__)
 import requests
 
-
-response = requests.get('https://api.exchangeratesapi.io/latest')
-response_json = response.json()
-rates = response_json['rates']
+app = Flask(__name__)
 
 
 @app.route('/')
@@ -13,46 +9,54 @@ def index():
     return render_template('index.html')
 
 
+def write_to_file(*args):
+    f = open('history.txt','a')
+    list_elem = [str(x) for x in [*args]]
+    if len(list_elem) == 4:
+        f.write(','.join(list_elem))
+        f.write("\n")
+
+
+def load_rate():
+    r = requests.get('https://api.exchangeratesapi.io/latest')
+    response_json = r.json()
+    rates = response_json['rates']
+    return rates
+
+
 @app.route("/eur_to_usd/<int:amount>")
 def eur_to_usd(amount):
-    exchange_rate = rates['USD']
+    exchange_rate = load_rate()['USD']
     results = amount * exchange_rate
     currency_to = 'USD'
-    f = open('history.txt','a')
-    f.write(f"\n{currency_to} , {exchange_rate}, {amount}, {results} ")
-    f.close()
+    write_to_file(currency_to, exchange_rate, amount, results)
     return f"У вас {amount} EUR  , это {results} USD"
 
 
 @app.route("/eur_to_gbp/<int:amount>")
 def eur_to_gbp(amount):
-    exchange_rate = rates['GBP']
+    exchange_rate = load_rate()['GBP']
     results = amount * exchange_rate
     currency_to = 'GBP'
-    f = open('history.txt','a')
-    f.write(f"\n{currency_to} , {exchange_rate}, {amount}, {results} ")
-    f.close()
+    write_to_file(currency_to, exchange_rate, amount, results)
     return f"У вас {amount} EUR  , это {results} GBP"
 
 
 @app.route("/eur_to_php/<int:amount>")
 def eur_to_php(amount):
-    exchange_rate = rates['PHP']
+    exchange_rate = load_rate()['PHP']
     results = amount * exchange_rate
     currency_to = 'PHP'
-    f = open('history.txt', 'a')
-    f.write(f"\n{currency_to} , {exchange_rate}, {amount}, {results} ")
-    f.close()
+    write_to_file(currency_to, exchange_rate, amount, results)
     return f"У вас {amount} EUR  , это {results} PHP"
 
 
 @app.route('/history')
 def history():
-    f = open('history.txt')
+    f = open('history.txt', 'r')
     fr = f.readlines()
+    f.close()
     return render_template('history.html', tex=fr)
-
-
 
 
 if __name__ == "__main__":
