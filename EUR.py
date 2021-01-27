@@ -15,6 +15,7 @@ def write_to_file(*args):
     if len(list_elem) == 4:
         f.write(','.join(list_elem))
         f.write("\n")
+        f.close
 
 
 def load_rate():
