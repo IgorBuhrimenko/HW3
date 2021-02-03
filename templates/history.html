@@ -5,10 +5,8 @@
     <title>History</title>
 </head>
 <body>
-<ul>
-        {% for item in tex %}
-            <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
+        <ul>{% for row in rows %}
+        <li>{{'{}  {}  {}  {}'.format(*row) }}</li>
+           {% endfor %}</ul>
 </body>
 </html>
