@@ -28,6 +28,7 @@ def index():
     return "Добро пожаловать в обменник"
 
 
+<<<<<<< HEAD
 def get_in_database(currency_to, exchange_rate, amount, results):
     conn = get_db()
     cursor = conn.cursor()
@@ -36,6 +37,15 @@ def get_in_database(currency_to, exchange_rate, amount, results):
                            values (?, ?, ?, ?)
                    """, (currency_to, exchange_rate, amount, results))
     conn.commit()
+=======
+def write_to_file(*args):
+    f = open('history.txt','a')
+    list_elem = [str(x) for x in [*args]]
+    if len(list_elem) == 4:
+        f.write(','.join(list_elem))
+        f.write("\n")
+        f.close
+>>>>>>> 3ab3cea6c9848e07e0c4a2bf15ac9e5f0cb77eba
 
 
 def load_rate():
@@ -126,5 +136,9 @@ def init_db():  # Инициализация БД
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     init_db()
     app.run(debug=True)
+=======
+    app.run(debug=True)
+>>>>>>> 3ab3cea6c9848e07e0c4a2bf15ac9e5f0cb77eba
